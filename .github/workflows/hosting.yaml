@@ -1,0 +1,62 @@
+name: Hosting
+
+on:
+  push:
+    paths:
+      - .github/workflows/hosting.yaml
+      - .hosting/**
+    branches:
+      - main
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_run:
+    workflows: [ CI ]
+    types: [ completed ]
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  HOSTING_PATH: .hosting
+  IMAGE_NAME: capybara-pro-code/github-hosted-app
+  REGISTRY: ghcr.io
+
+permissions:
+  contents: write
+
+jobs:
+  run-backend-service-app:
+    name: Run backend service app
+    if: ${{ github.event.workflow_run == null || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Create .env files
+        working-directory: ${{ env.HOSTING_PATH }}
+        run: |
+          cat <<EOT > app.env
+          FRONTEND_HOST=${{ github.repository_owner }}.github.io
+          EOT
+          cat <<EOT > tunnel.env
+          GITHUB_REPOSITORY=${{ github.repository }}
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          EOT
+      
+      - name: Nx set SHAs
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v4.0.1
+        with:
+          workflow-id: ci.yaml
+          set-environment-variables-for-job: false
+      
+      - name: Up docker compose
+        working-directory: ${{ env.HOSTING_PATH }}
+        run: |
+          TAG=${{ steps.setSHAs.outputs.base }} docker compose up --pull=always
+      
+      - name: Logs to artifact
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: logs
+          path: .hosting/logs/**

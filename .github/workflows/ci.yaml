@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    paths:
+      - src/**
+      - .github/workflows/ci.yaml
+      - .github/workflows/test-report.yaml
+    branches:
+      - main
+  pull_request:
+    paths:
+      - src/**
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+permissions:
+  packages: write
+  contents: write
+
+env:
+  IMAGE_NAME: capybara-pro-code/github-hosted-app
+  REGISTRY: ghcr.io
+  ARCHITECTURES: x64,arm64
+
+jobs:
+  build:
+    name: Build, Tests, Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v3
+      
+      - name: Get Cache Month
+        id: cache-month
+        run: |
+          echo "date=$(/bin/date -u "+%Y%m")" >> $GITHUB_OUTPUT
+        shell: bash
+      
+      - uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ steps.cache-month.outputs.date }}-${{ hashFiles('src/Directory.Packages.props') }}
+          restore-keys: |
+            nuget-${{ steps.cache-month.outputs.date }}-
+      
+      - name: Run restore
+        timeout-minutes: 10
+        working-directory: src
+        run: |
+          dotnet restore
+      
+      - name: Upload test results trx files
+        uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: test-results
+          path: '**/*.trx'
+      
+      - uses: docker/login-action@v2
+        if: github.event_name != 'pull_request'
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      
+      - name: Publish Backend docker image
+        if: github.event_name != 'pull_request'
+        working-directory: src
+        run: |
+          archImages=""
+          for arch in $(echo $ARCHITECTURES | sed "s/,/ /g"); do
+            tag=${{ github.sha }}-$arch
+            remoteImage=$REGISTRY/$IMAGE_NAME:$tag
+            archImages+=" ${remoteImage}"
+          
+            dotnet publish Backend --os linux --arch $arch /t:PublishContainer -c Release /p:ContainerRegistry="$REGISTRY" /p:ContainerRepository="$IMAGE_NAME" /p:ContainerImageTags="$tag"
+          done
+          docker manifest create $REGISTRY/$IMAGE_NAME:${{ github.sha }} $archImages
+          docker manifest push $REGISTRY/$IMAGE_NAME:${{ github.sha }}  
+          docker manifest create $REGISTRY/$IMAGE_NAME:latest $archImages
+          docker manifest push $REGISTRY/$IMAGE_NAME:latest
+      
+      - name: Publish Frontend static
+        run: |
+          dotnet publish src/Frontend -c Release -o publish --nologo
+          cp publish/wwwroot/index.html publish/wwwroot/404.html
+          touch publish/wwwroot/.nojekyll
+      
+      - name: Commit Frontend to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: publish/wwwroot
+          clean-exclude: backend_public_url 

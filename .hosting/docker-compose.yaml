@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  app:
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_NAME:-capybara-pro-code/free-github-hosted-app}:${TAG:-latest}
+    env_file: app.env
+    volumes:
+      - ./logs/:/app/logs/
+  tunnel:
+    image: bitnami/git
+    env_file: tunnel.env
+    depends_on: [ app ]
+    volumes:
+      - ${PWD}/start-tunnel.sh:/tunnel/start-tunnel.sh
+    command:
+      - /tunnel/start-tunnel.sh
+  monitor:
+    image: docker
+    depends_on: [ app ]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PWD}/:/.hosting/
+    working_dir: /.hosting
+    command: [ "sh", "/.hosting/monitor-app.sh" ]

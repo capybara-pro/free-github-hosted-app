@@ -1,0 +1,29 @@
+@page "/"
+@using Frontend.Services
+
+<h1>Hello, capybara!</h1>
+
+<p>Backend Public Url: @BackendPublicUrl</p>
+
+<p>Application Start Date: @ApplicationStartDate</p>
+
+<p>Metrics:</p>
+<pre>@Metrics</pre>
+
+@inject BackendService Backend
+@inject RenewBackendUrlHandler RenewBackendUrlHandler
+
+@code {
+
+    private string? BackendPublicUrl => RenewBackendUrlHandler.BackendUrl;
+    private DateTimeOffset? ApplicationStartDate { get; set; }
+    private string? Metrics { get; set; }
+
+    protected override async Task OnInitializedAsync() {
+        ApplicationStartDate = await Backend.GetApplicationStartDate();
+        Metrics = await Backend.GetMetrics();
+
+        await base.OnInitializedAsync();
+    }
+
+}
