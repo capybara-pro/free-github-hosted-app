@@ -7,7 +7,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "BlazorApp.dll": "sha256-4sv9s0kygeH1nQl8rYNtgaAFWme4o\/87aRmoIopOg6M=",
+      "BlazorApp.dll": "sha256-A\/XfzyfH2jb4YrW5pV4vfWibKUj7AgwfJ8ZOXbAvBsU=",
       "Microsoft.AspNetCore.Components.dll": "sha256-tfciarYRmWWTya+qGiEVc6jasCp\/gqGmSYJlG8E0SRA=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-Qwp\/LUQPvlE\/Y2J0zcfgh9nh7YBeJx2H4j9Xo8w7hTc=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-XYM80863rCSqPKTIFsPNKnli9FGEN6ydRhJq9gbYJAE=",
@@ -30,7 +30,7 @@
       "System.Net.Primitives.dll": "sha256-HuRvFf8Y38IT69DLfrwalhZZIbLB5f6aWXuzmrMVHrs=",
       "System.Private.CoreLib.dll": "sha256-oMQbOxErLgdSciWijDXhePYdWY7lByPAO3QQRYQBUec=",
       "System.Private.Uri.dll": "sha256-f94Fo3+jCL7U8GjEtcbtyYhfOR2myoJ9BRV\/oyg2n8o=",
-      "System.Runtime.dll": "sha256-aftxdIW6G4AgiAk99T0ho4erMf+E4ZhwePb3+ZfELhg=",
+      "System.Runtime.dll": "sha256-8u0QeW0I47XGE\/wdwSNLdkjli14dWGMurjg4l7poFvo=",
       "System.Runtime.InteropServices.JavaScript.dll": "sha256-hbD8oln1krNFxUhgKmc+s7EXundksDxnjZg9dtrjZrc=",
       "System.Text.Encodings.Web.dll": "sha256-NPIdkyI2+W1OfcvK2PLAYVqZyPg2nNm82v\/RFFO2\/MI=",
       "System.Text.Json.dll": "sha256-gNGUxpM3\/xAX+4bOjvzrbp9sj9k7FcKg7JaasM0aXmQ="
