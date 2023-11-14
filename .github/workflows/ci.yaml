@@ -21,7 +21,7 @@ permissions:
   contents: write
 
 env:
-  IMAGE_NAME: capybara-pro-code/github-hosted-app
+  IMAGE_NAME: ${{ github.repository }}
   REGISTRY: ghcr.io
   ARCHITECTURES: x64,arm64
 
