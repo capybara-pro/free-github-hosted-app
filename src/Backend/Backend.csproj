@@ -1,7 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-    <PropertyGroup>
-        <UserSecretsId>dotnet-WorkerService-EC9C258E-48DB-460B-95FC-86102A617B40</UserSecretsId>
-    </PropertyGroup>
 
     <ItemGroup>
         <ContainerLabel Include="org.opencontainers.image.source" Value="https://$(ContainerRegistry)/$(ContainerRepository)" />
@@ -20,4 +17,5 @@
         <DependentUpon>appsettings.json</DependentUpon>
       </Content>
     </ItemGroup>
+    
 </Project>
