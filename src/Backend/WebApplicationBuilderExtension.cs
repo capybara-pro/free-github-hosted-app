@@ -10,7 +10,7 @@ public static class WebApplicationBuilderExtension {
                 }
 
                 if (builder.Environment.IsDevelopment()) {
-                    policyBuilder.WithOrigins("http://localhost:5188", "https://localhost:7076");
+                    policyBuilder.WithOrigins("http://localhost:5034", "https://localhost:7067");
                 }
             })
         );
