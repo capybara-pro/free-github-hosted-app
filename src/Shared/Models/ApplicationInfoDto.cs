@@ -1,5 +1,3 @@
-using System;
-
-namespace Shared.Models; 
+namespace Shared.Models;
 
 public record ApplicationInfoDto(DateTimeOffset ApplicationStartDate);

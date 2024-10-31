@@ -13,7 +13,7 @@ public class BackendService : IDisposable {
     public async Task<DateTimeOffset> GetApplicationStartDate() {
         var appInfo = await _httpClient.GetFromJsonAsync<ApplicationInfoDto>("");
 
-        return appInfo!.ApplicationStartDate;
+        return (appInfo ?? throw new NullReferenceException()).ApplicationStartDate;
     }
 
     public async Task<string> GetMetrics() {

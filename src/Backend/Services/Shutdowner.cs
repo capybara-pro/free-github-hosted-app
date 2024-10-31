@@ -32,10 +32,10 @@ public class Shutdowner : BackgroundService {
             try {
                 var backendUrl = await BackendUrlResolver.GetUrl(httpClient, _hostEnvironment.IsDevelopment(), stoppingToken);
                 var appInfo = await httpClient.GetFromJsonAsync<ApplicationInfoDto>(backendUrl, cancellationToken: stoppingToken);
-                if (Constants.ApplicationStartDate >= appInfo!.ApplicationStartDate) {
+                if (appInfo != null && Constants.ApplicationStartDate >= appInfo.ApplicationStartDate) {
                     continue;
                 }
-            } 
+            }
             catch (Exception ex) {
                 _logger.LogError(ex, "Something went wrong");
                 continue;

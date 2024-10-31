@@ -4,16 +4,12 @@ using Shared;
 
 namespace Frontend.Services;
 
-public class RenewBackendUrlHandler : HttpClientHandler {
+public class RenewBackendUrlHandler(IWebAssemblyHostEnvironment webAssemblyHostEnvironment) : HttpClientHandler {
     public string? BackendUrl;
-    private readonly IWebAssemblyHostEnvironment _webAssemblyHostEnvironment;
-
-    public RenewBackendUrlHandler(IWebAssemblyHostEnvironment webAssemblyHostEnvironment) {
-        _webAssemblyHostEnvironment = webAssemblyHostEnvironment;
-    }
+    private readonly IWebAssemblyHostEnvironment _webAssemblyHostEnvironment = webAssemblyHostEnvironment;
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
-        var host = request.RequestUri!.Host;
+        var host = (request.RequestUri ?? throw new NullReferenceException()).Host;
 
         if (host is not "lhr.life") {
             return await base.SendAsync(request, cancellationToken);
