@@ -30,6 +30,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ env.HOSTING_PATH }}
+          sparse-checkout-cone-mode: false
       
       - name: Create .env files
         working-directory: ${{ env.HOSTING_PATH }}
