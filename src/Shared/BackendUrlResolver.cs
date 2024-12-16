@@ -6,6 +6,6 @@ public static class BackendUrlResolver {
             return "http://localhost:5000";
         }
 
-        return await client.GetStringAsync($"{Constants.TunnelUrl}?token={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}", cancellationToken);
+        return await client.GetStringAsync($"{Constants.TunnelUrl}?v={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}", cancellationToken);
     }
 }
