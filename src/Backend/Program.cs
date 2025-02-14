@@ -6,7 +6,10 @@ var app = WebApplication.CreateBuilder()
     .AddHttpClient()
     .Build();
 
-app.UseCors();
+app.UseCors(builder => builder
+    .WithOrigins("https://capybara-pro-code.github.io")
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 app.UseRouting();
 app.UseMetricServer();
 app.MapGet("/", () => new ApplicationInfoDto(Constants.ApplicationStartDate));

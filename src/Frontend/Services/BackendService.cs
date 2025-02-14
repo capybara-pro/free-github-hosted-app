@@ -7,7 +7,10 @@ public class BackendService : IDisposable {
     private readonly HttpClient _httpClient;
 
     public BackendService(RenewBackendUrlHandler renewBackendUrlHandler) {
-        _httpClient = new HttpClient(renewBackendUrlHandler) { BaseAddress = new Uri("https://lhr.life") };
+        _httpClient = new HttpClient(renewBackendUrlHandler) {
+            BaseAddress = new Uri("https://lhr.life"),
+            DefaultRequestHeaders = { { "bypass-tunnel-reminder", "true" } }
+        };
     }
 
     public async Task<DateTimeOffset> GetApplicationStartDate() {
