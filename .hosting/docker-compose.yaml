@@ -1,3 +1,4 @@
+name: github-hosted-app
 services:
   app:
     image: ${REGISTRY:-ghcr.io}/${IMAGE_NAME:-capybara-pro-code/free-github-hosted-app}:${TAG:-latest}
@@ -5,7 +6,7 @@ services:
     volumes:
       - ./logs/:/app/logs/
   tunnel:
-    image: bitnami/git
+    image: bitnami/node
     env_file: tunnel.env
     depends_on: [ app ]
     volumes:

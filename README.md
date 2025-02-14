@@ -40,7 +40,7 @@ The main logic of operation is summarized in the following sequence:
 
 ## HTTPS Tunnel:
 
-This template uses https://localhost.run/ to organize a gateway to the backend. You can use any other service like ngrok or something else. However, keep in mind that ngrok allows only one tunnel per region in the free plan, so smooth migration between backend instances is not possible.
+This template uses https://github.com/localtunnel/localtunnel to organize a gateway to the backend. You can use any other service like ngrok or something else. However, keep in mind that ngrok allows only one tunnel per region in the free plan, so smooth migration between backend instances is not possible.
 
 ## Usage Instructions:
 

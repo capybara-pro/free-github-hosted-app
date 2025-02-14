@@ -48,8 +48,8 @@ commit_public_url() {
 
 start_tunnel() {
   echo "Starting tunnel in background on port [ ${LOCAL_PORT} ]"
-  ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -T -R "80:$LOCAL_HOST:$LOCAL_PORT" nokey@localhost.run 2>&1 |
-    tee >(grep -oE --line-buffered '(https:\/\/[[:alnum:]]+\.lhr\.life)' | while IFS= read -r line; do commit_public_url "$line"; done)
+  npx localtunnel --local-host app --port 8080 |
+    tee >(grep -oE --line-buffered '(https:\/\/[[:alnum:]\w-]+\.loca\.lt)' | while IFS= read -r line; do commit_public_url "$line"; done)
 }
 
 init_git
